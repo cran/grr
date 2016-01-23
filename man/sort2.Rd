@@ -7,11 +7,13 @@
 sort2(x)
 }
 \arguments{
-\item{x}{a vector of class numeric, integer, character, factor, or logical.}
+\item{x}{a vector of class numeric, integer, character, factor, or logical. 
+Long vectors are not supported.}
 }
 \description{
-Simplified implementation of sort that is much faster than base::sort. 
-For large vectors, typically is about 2x faster for numbers and 20x faster for characters and factors.
+Simplified implementation of \code{\link{sort}}. For large vectors,
+typically is about 2x faster for numbers and 20x faster for characters and
+factors.
 }
 \examples{
 chars<-as.character(sample(1e3,1e4,TRUE))
@@ -37,6 +39,15 @@ facts<-as.factor(as.character(sample(1e3,1e4,TRUE)))
 system.time(a<-sort(facts))
 system.time(b<-sort2(facts))
 identical(a,b)
+
+#How are special values like NA and Inf handled?
+#For numerics, values sort intuitively, with the important note that NA and
+#NaN will come after all real numbers but before Inf.
+sort2(c(1,2,NA,NaN,Inf,-Inf))
+#For characters, values sort correctly with NA at the end.
+sort2(c('C','B',NA,'A'))
+#For factors, values sort correctly with NA at the beginning.
+sort2(as.factor(c('C','B',NA,'A')))
 
 \dontrun{
 chars<-as.character(sample(1e5,1e6,TRUE))

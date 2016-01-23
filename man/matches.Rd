@@ -44,6 +44,8 @@ usually faster than the best joins in other packages and thousands of times fast
 \item{inner}{\code{all.x=FALSE}, \code{all.y=FALSE}}
 \item{full}{\code{all.x=TRUE}, \code{all.y=TRUE}}
 }
+
+Note that \code{NA} values will match other \code{NA} values.
 }
 \examples{
 one<-as.integer(1:10000)

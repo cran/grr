@@ -1,20 +1,26 @@
-#' Alternate Implementations of Base R Functions
+#' Alternative Implementations of Base R Functions
 #' 
-#' Alternate implementations of some base R functions, including sort, order, and match.  Functions are
-#' faster and/or have been otherwise augmented.  See the documentation of individual functions
+#' Alternative implementations of some base R functions, including sort, order, and match.  Functions are
+#' simplified but can be faster or have other advantages.  See the documentation of individual functions
 #' for details and benchmarks.
+#' 
+#' Note that these functions cannot be considered drop-in replacements for the functions in base \code{R}.  
+#' They do not implement all the same parameters and do not work for all data types.  Utilize these 
+#' with caution in specialized applications that require them.
 #' 
 #' @name grr
 #' @docType package
 #' @useDynLib grr
 NULL
 
-#' Sorting vectors 
+#' Sorting vectors
 #' 
-#' Simplified implementation of sort that is much faster than base::sort. 
-#' For large vectors, typically is about 2x faster for numbers and 20x faster for characters and factors.
+#' Simplified implementation of \code{\link{sort}}. For large vectors,
+#' typically is about 2x faster for numbers and 20x faster for characters and
+#' factors.
 #' 
-#' @param x a vector of class numeric, integer, character, factor, or logical.
+#' @param x a vector of class numeric, integer, character, factor, or logical. 
+#'   Long vectors are not supported.
 #' @export
 #' @examples
 #' chars<-as.character(sample(1e3,1e4,TRUE))
@@ -40,6 +46,15 @@ NULL
 #' system.time(a<-sort(facts))
 #' system.time(b<-sort2(facts))
 #' identical(a,b)
+#' 
+#' #How are special values like NA and Inf handled?
+#' #For numerics, values sort intuitively, with the important note that NA and
+#' #NaN will come after all real numbers but before Inf.
+#' sort2(c(1,2,NA,NaN,Inf,-Inf))
+#' #For characters, values sort correctly with NA at the end.
+#' sort2(c('C','B',NA,'A'))
+#' #For factors, values sort correctly with NA at the beginning.
+#' sort2(as.factor(c('C','B',NA,'A')))
 #' 
 #' \dontrun{
 #' chars<-as.character(sample(1e5,1e6,TRUE))
@@ -70,9 +85,10 @@ sort2<-function(x)
 
 #' Ordering vectors
 #' 
-#' Alternative to \code{\link{order}}.  For large vectors, typically is about 3x faster for numbers and 20x faster for characters.
+#' Simplified implementation of \code{\link{order}}.  For large vectors, typically is about 3x faster for 
+#' numbers and 20x faster for characters.
 #' 
-#' @param x a vector of class numeric, integer, character, factor, or logical.
+#' @param x a vector of class numeric, integer, character, factor, or logical.  Long vectors are not supported.
 #' @export
 #' @examples
 #' chars<-as.character(sample(1e3,1e4,TRUE))
@@ -100,6 +116,15 @@ sort2<-function(x)
 #' system.time(b<-order2(facts))
 #' identical(facts[a],facts[b])
 #' 
+#' #How are special values like NA and Inf handled?
+#' #For numerics, values sort intuitively, with the important note that NA and
+#' #NaN will come after all real numbers but before Inf.
+#' (function (x) x[order2(x)])(c(1,2,NA,NaN,Inf,-Inf))
+#' #For characters, values sort correctly with NA at the end.
+#' (function (x) x[order2(x)])(c('C','B',NA,'A'))
+#' #For factors, values sort correctly with NA at the end.
+#' (function (x) x[order2(x)])(as.factor(c('C','B',NA,'A')))
+#' 
 #' \dontrun{
 #' chars<-as.character(sample(1e5,1e6,TRUE))
 #' system.time(a<-order(chars))
@@ -121,6 +146,8 @@ sort2<-function(x)
 #' system.time(a<-order(facts))
 #' system.time(b<-order2(facts))
 #' identical(facts[a],facts[b])
+#' 
+#' 
 #' }
 order2<-function(x)
 {
@@ -146,6 +173,7 @@ order2<-function(x)
 #' \item{full}{\code{all.x=TRUE}, \code{all.y=TRUE}}
 #' }
 #' 
+#' Note that \code{NA} values will match other \code{NA} values.
 #' 
 #' @param x vector.  The values to be matched.  Long vectors are not currently supported.
 #' @param y vector.  The values to be matched.  Long vectors are not currently supported.

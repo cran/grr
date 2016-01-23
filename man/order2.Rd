@@ -7,10 +7,11 @@
 order2(x)
 }
 \arguments{
-\item{x}{a vector of class numeric, integer, character, factor, or logical.}
+\item{x}{a vector of class numeric, integer, character, factor, or logical.  Long vectors are not supported.}
 }
 \description{
-Alternative to \code{\link{order}}.  For large vectors, typically is about 3x faster for numbers and 20x faster for characters.
+Simplified implementation of \code{\link{order}}.  For large vectors, typically is about 3x faster for 
+numbers and 20x faster for characters.
 }
 \examples{
 chars<-as.character(sample(1e3,1e4,TRUE))
@@ -38,6 +39,15 @@ system.time(a<-order(facts))
 system.time(b<-order2(facts))
 identical(facts[a],facts[b])
 
+#How are special values like NA and Inf handled?
+#For numerics, values sort intuitively, with the important note that NA and
+#NaN will come after all real numbers but before Inf.
+(function (x) x[order2(x)])(c(1,2,NA,NaN,Inf,-Inf))
+#For characters, values sort correctly with NA at the end.
+(function (x) x[order2(x)])(c('C','B',NA,'A'))
+#For factors, values sort correctly with NA at the end.
+(function (x) x[order2(x)])(as.factor(c('C','B',NA,'A')))
+
 \dontrun{
 chars<-as.character(sample(1e5,1e6,TRUE))
 system.time(a<-order(chars))
@@ -59,6 +69,8 @@ facts<-as.factor(as.character(sample(1e5,1e6,TRUE)))
 system.time(a<-order(facts))
 system.time(b<-order2(facts))
 identical(facts[a],facts[b])
+
+
 }
 }
 
