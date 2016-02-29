@@ -48,6 +48,16 @@ identical(facts[a],facts[b])
 #For factors, values sort correctly with NA at the end.
 (function (x) x[order2(x)])(as.factor(c('C','B',NA,'A')))
 
+
+#Ordering a data frame using order2
+df<-data.frame(one=as.character(1:4e5),
+   two=sample(1:1e5,4e5,TRUE),
+   three=sample(letters,4e5,TRUE),stringsAsFactors=FALSE)
+system.time(a<-df[order(df$one),])  
+system.time(b<-df[order2(df$one),])
+system.time(a<-df[order(df$two),])  
+system.time(b<-df[order2(df$two),])
+
 \dontrun{
 chars<-as.character(sample(1e5,1e6,TRUE))
 system.time(a<-order(chars))

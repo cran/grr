@@ -46,7 +46,7 @@ identical(a,b)
 sort2(c(1,2,NA,NaN,Inf,-Inf))
 #For characters, values sort correctly with NA at the end.
 sort2(c('C','B',NA,'A'))
-#For factors, values sort correctly with NA at the beginning.
+#For factors, values sort correctly with NA at the end
 sort2(as.factor(c('C','B',NA,'A')))
 
 \dontrun{

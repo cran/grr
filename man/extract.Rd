@@ -9,14 +9,18 @@ extract(x, i = NULL, j = NULL)
 \arguments{
 \item{x}{object from which to extract elements}
 
-\item{i, j}{indices specifying elements to extract.  Can be \code{numeric}, \code{character}, or \code{logical} vectors.}
+\item{i, j}{indices specifying elements to extract.  Can be \code{numeric},
+\code{character}, or \code{logical} vectors.}
 }
 \description{
-Alternative to built-in \code{\link{Extract}} or \code{[}.  Allows for extraction operations that are ambivalent to the data type of the object.
-For example, \code{extract(x,i)} will work on lists, vectors, data frames, matrices, etc.
+Alternative to built-in \code{\link{Extract}} or \code{[}.  Allows for 
+extraction operations that are ambivalent to the data type of the object. For 
+example, \code{extract(x,i)} will work on lists, vectors, data frames, 
+matrices, etc.
 }
 \details{
-Extraction is 2-100x faster on data frames than with the built in operation - but does not preserve row names.
+Extraction is 2-100x faster on data frames than with the built in operation - 
+but does not preserve row names.
 }
 \examples{
 #Typically about twice as fast on normal subselections
